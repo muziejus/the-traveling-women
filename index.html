@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.0/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.0/dist/MarkerCluster.Default.css" />
     <style>
       html, body {
         height: 100%;
@@ -24,6 +26,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.0.0/dist/leaflet.markercluster.js"></script>
     <script src="./map.geojson"></script>
     <script>
       function onEachFeature(feature, layer) {
@@ -32,15 +35,29 @@
           layer.bindPopup("name: " + feature.properties.name + "<br />Date time: " + feature.properties.datetime);
         }
       }
+
+      function getCircleMarker(fillColor){
+        return { radius: 4, fillColor: fillColor, color: "#666", weight: 1, opacity: 0.7, fillOpacity: 0.6 };
+      }
+
       var map = L.map('map', {zoom: 10, center: [24.746117, 67.924336]});
       L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
         subdomains: 'abcd',
         maxZoom: 19
       }).addTo(map);
-      L.geoJSON(photos, {
-        onEachFeature: onEachFeature
-      }).addTo(map);
+
+      var markers = L.markerClusterGroup();
+
+      var geoJson = L.geoJSON(photos, {
+          pointToLayer: function(feature, latlng) {
+            return L.circleMarker(latlng, getCircleMarker("#00dd00"));o
+          },
+          onEachFeature: onEachFeature
+        }).addTo(map);
+      markers.addLayer(geoJson);
+      map.addLayer(markers);
+      map.fitBounds(markers.getBounds());
     </script>
   </body>
 </html>
