@@ -1,6 +1,6 @@
 require 'httparty'
 
-places = JSON.parse(File.read("ruby.json"))["features"]
+places = JSON.parse(File.read("ruby.json"))
 unique_coordinates = places.map{ |p| { lat: p["geometry"]["coordinates"][1].round(3), lng: p["geometry"]["coordinates"][0].round(3) } }.uniq
 File.open("coords.csv", "w") do |csv|
   csv.write "lat, lng, name\n"
