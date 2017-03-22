@@ -27,12 +27,12 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.0.0/dist/leaflet.markercluster.js"></script>
-    <script src="./map.geojson"></script>
+    <script src="./new_ruby.json"></script>
     <script>
       function onEachFeature(feature, layer) {
         // does this feature have a property named popupContent?
         if (feature.properties && feature.properties.name) {
-          layer.bindPopup("name: " + feature.properties.name + "<br />Date time: " + feature.properties.datetime);
+          layer.bindPopup("place: " + feature.properties.toponym + "<br />name: " + feature.properties.name + "<br />Date time: " + feature.properties.datetime);
         }
       }
 
